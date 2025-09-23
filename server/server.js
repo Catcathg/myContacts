@@ -1,5 +1,6 @@
-const express = require('express');
 require('dotenv').config();
+console.log("Loaded ENV:", process.env);
+const express = require('express');
 const connectDB = require('./db/mongodb');
 const contactRoutes = require('./routes/contactRoute');
 const userRoutes = require('./routes/userRoute')
