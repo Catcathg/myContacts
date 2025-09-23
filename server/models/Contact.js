@@ -3,26 +3,26 @@ const mongoose = require('mongoose');
 const ContactSchema = mongoose.Schema(
     {
         firstName: {
-            type: String,
-            required: [true, "Please enter contact first name"]
+            type: String, required: true
         },
         lastName: {
-            type: String,
-            required: [true, "Please enter contact last name"]
+            type: String, required: true
         },
         phone: {
-            type: Number,
-            required: [true, "Please enter contact number"]
+            type: String, required: true, minlength: 10, maxlength: 20
         },
         image: {
             type: String,
-            default: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fvectorified.com%2Fimages%2Fanonymous-person-icon-13.jpg&f=1&nofb=1&ipt=8d3abd35425fb4001f99a38aa96e93df97e3e84dc375bd1fff96514214c5c54e"
+            default: "https://vectorified.com/images/anonymous-person-icon-13.jpg"
         },
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+        }
     },
-    {
-        timestamps: true,
-    }
-)
+    { timestamps: true }
+);
 
 const Contact = mongoose.model("Contact", ContactSchema);
 module.exports = Contact;
