@@ -1,6 +1,6 @@
 const Contact = require("../models/Contact");
 
-exports.getContacts = async (req, res) => {
+exports.getContact = async (req, res) => {
   try {
     const contacts = await Contact.find({ user: req.user.id }); //req.user.id (filtré en fonction du user connecté)
     res.json(contacts);
@@ -44,3 +44,4 @@ exports.deleteContact = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
