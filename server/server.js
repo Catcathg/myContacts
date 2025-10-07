@@ -1,6 +1,7 @@
 require('dotenv').config();
 console.log("Loaded ENV:", process.env); 
 const express = require('express');
+const cors = require('cors');
 const { swaggerUi, swaggerSpec } = require("./swagger");
 const connectDB = require('./db/mongodb');
 const contactRoutes = require('./routes/contactRoute');
@@ -8,6 +9,7 @@ const userRoutes = require('./routes/userRoute')
 
 const app = express()
 
+app.use(cors());
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
