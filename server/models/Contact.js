@@ -9,7 +9,7 @@ const ContactSchema = mongoose.Schema(
             type: String, required: true
         },
         phone: {
-            type: String, required: true, minlength: 10, maxlength: 20
+            type: String, required: true, minlength: 10, maxlength: 20, unique: true
         },
         image: {
             type: String,

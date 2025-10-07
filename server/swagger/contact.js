@@ -5,38 +5,52 @@ const auth = require("../middleware/auth");
 
 /**
  * @openapi
- * /contacts:
+ * tags:
+ *   - name: Contacts
+ *     description: Gestion des contacts de l'utilisateur connecté
+ *
+ * /api/contacts:
  *   get:
  *     summary: Récupère tous les contacts de l'utilisateur connecté
+ *     tags: [Contacts]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Liste des contacts
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Contact'
+ *         description: Liste des contacts récupérée avec succès
+ *       401:
+ *         description: Non autorisé - token invalide ou manquant
+ *       500:
+ *         description: Erreur serveur
  *
  *   post:
  *     summary: Crée un nouveau contact pour l'utilisateur connecté
+ *     tags: [Contacts]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ContactInput'
+ *           example:
+ *             firstName: "Jean"
+ *             lastName: "Dujardin"
+ *             email: "jean.dujardin@example.com"
+ *             phone: "0123456789"
  *     responses:
  *       201:
  *         description: Contact créé avec succès
+ *       400:
+ *         description: Données invalides
+ *       401:
+ *         description: Non autorisé - token invalide ou manquant
+ *       500:
+ *         description: Erreur serveur
  *
- * /contacts/{id}:
+ * /api/contacts/{id}:
  *   patch:
- *     summary: Met à jour un contact existant (seulement si appartient à l'utilisateur connecté)
+ *     summary: Met à jour un contact existant
+ *     tags: [Contacts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -50,16 +64,26 @@ const auth = require("../middleware/auth");
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ContactInput'
+ *           example:
+ *             firstName: "Jean"
+ *             lastName: "Jardin"
+ *             email: "jean.jardin@example.com"
+ *             phone: "0123456789"
  *     responses:
  *       200:
- *         description: Contact mis à jour
+ *         description: Contact mis à jour avec succès
+ *       400:
+ *         description: Données invalides
+ *       401:
+ *         description: Non autorisé - token invalide ou manquant
  *       404:
  *         description: Contact introuvable
+ *       500:
+ *         description: Erreur serveur
  *
  *   delete:
- *     summary: Supprime un contact existant (seulement si appartient à l'utilisateur connecté)
+ *     summary: Supprime un contact existant
+ *     tags: [Contacts]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -71,55 +95,13 @@ const auth = require("../middleware/auth");
  *         description: ID du contact
  *     responses:
  *       200:
- *         description: Contact supprimé
+ *         description: Contact supprimé avec succès
+ *       401:
+ *         description: Non autorisé - token invalide ou manquant
  *       404:
  *         description: Contact introuvable
- */
-
-/**
- * @openapi
- * components:
- *   schemas:
- *     ContactServeur:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *           example: 651f26a5c7d9e1a23a4b9e6c
- *         firstName:
- *           type: string
- *           example: Paul
- *         lastName:
- *           type: string
- *           example: Dupont
- *         phone:
- *           type: string
- *           example: "0623456789"
- *         image:
- *           type: string
- *           example: "https://vectorified.com/images/anonymous-person-icon-13.jpg"
- *         user:
- *           type: string
- *           description: ID du user propriétaire
- *     ContactRequete:
- *       type: object
- *       required:
- *         - firstName
- *         - lastName
- *         - phone
- *       properties:
- *         firstName:
- *           type: string
- *           example: Christine
- *         lastName:
- *           type: string
- *           example: Lamartine
- *         phone:
- *           type: string
- *           example: "0678901234"
- *         image:
- *           type: string
- *           example: "https://example.com/avatar.png"
+ *       500:
+ *         description: Erreur serveur
  */
 
 router.get("/", auth, contactController.getContact);

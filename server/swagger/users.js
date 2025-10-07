@@ -4,9 +4,17 @@ const { register, login } = require("../controllers/authController");
 
 /**
  * @openapi
- * /users/register:
+ * tags:
+ *   - name: Users
+ *     description: Gestion des utilisateurs (inscription & connexion)
+ */
+
+/**
+ * @openapi
+ * /auth/register:
  *   post:
  *     summary: Crée un nouvel utilisateur
+ *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
@@ -26,12 +34,39 @@ const { register, login } = require("../controllers/authController");
  *     responses:
  *       201:
  *         description: Utilisateur créé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Utilisateur créé avec succès"
  *       400:
- *         description: Email déjà utilisé
+ *         description: Données invalides ou email déjà utilisé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Cet email est déjà utilisé"
+ *       500:
+ *         description: Erreur interne du serveur
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Erreur serveur"
  *
- * /users/login:
+ * /auth/login:
  *   post:
  *     summary: Connecte un utilisateur et retourne un token JWT
+ *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
@@ -50,9 +85,45 @@ const { register, login } = require("../controllers/authController");
  *                 example: motdepasse123
  *     responses:
  *       200:
- *         description: Connexion réussie
+ *         description: Connexion réussie et token renvoyé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       400:
- *         description: Email ou mot de passe invalide
+ *         description: Identifiants invalides ou champs manquants
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Email ou mot de passe incorrect"
+ *       401:
+ *         description: Non autorisé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Accès non autorisé"
+ *       500:
+ *         description: Erreur interne du serveur
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Erreur serveur"
  */
 
 router.post("/register", register);

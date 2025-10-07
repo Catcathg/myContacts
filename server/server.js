@@ -14,7 +14,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 connectDB();
 
 //Routes
-app.use('/api/contact', contactRoutes);
+app.use('/api/contacts', contactRoutes);
 app.use("/auth", userRoutes);
 
 const PORT = process.env.PORT || 3000;

@@ -37,7 +37,7 @@ exports.login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: "Email ou mot de passe invalide." });
 
     const token = jwt.sign(
-      { id: user._id }, //req.user.id (le user connecté)
+      { id: user._id }, //req.user.id (le user connecté) 
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
