@@ -104,9 +104,4 @@ const auth = require("../middleware/auth");
  *         description: Erreur serveur
  */
 
-router.get("/", auth, contactController.getContact);
-router.post("/", auth, contactController.createContact);
-router.patch("/:id", auth, contactController.updateContact);
-router.delete("/:id", auth, contactController.deleteContact);
-
 module.exports = router;
