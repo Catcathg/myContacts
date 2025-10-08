@@ -14,15 +14,26 @@ const ContactList = ({ refreshKey }) => {
     image: "",
   });
 
+  const getToken = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Token manquant ! L'utilisateur n'est pas logué.");
+    }
+    return token;
+  };
+
   const fetchContacts = async () => {
+    setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = getToken();
+      if (!token) return setError("Utilisateur non authentifié.");
+
       const response = await axios.get(
         `https://mycontacts-a3hi.onrender.com/api/contacts`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Assure-toi que c'est bien un tableau
+      // Vérifie si les contacts sont dans response.data ou response.data.contacts
       const data = Array.isArray(response.data)
         ? response.data
         : response.data.contacts;
@@ -42,7 +53,6 @@ const ContactList = ({ refreshKey }) => {
     }
   };
 
-  // Re-fetch quand refreshKey change
   useEffect(() => {
     fetchContacts();
   }, [refreshKey]);
@@ -65,14 +75,17 @@ const ContactList = ({ refreshKey }) => {
 
   const saveEdit = async (id) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = getToken();
+      if (!token) return alert("Utilisateur non authentifié.");
+
       await axios.patch(
         `https://mycontacts-a3hi.onrender.com/api/contacts/${id}`,
         editData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       setEditingId(null);
-      fetchContacts();
+      fetchContacts(); // rafraîchir la liste
     } catch (err) {
       alert("Erreur lors de la modification du contact.");
       console.error(err);

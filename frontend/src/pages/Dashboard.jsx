@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [refreshKey, setRefreshKey] = useState(0); // clé pour forcer le refresh
+  const [refreshKey, setRefreshKey] = useState(0); 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -20,8 +20,7 @@ const Dashboard = () => {
   };
 
   const handleAddContact = () => {
-    navigate("/ajouter-contact", { state: { onAdd: () => setRefreshKey(prev => prev + 1) } });
-    // onAdd sera déclenché après l'ajout pour rafraîchir la liste
+    navigate("/ajouter-contact", { state: { refreshDashboard: () => setRefreshKey(prev => prev + 1) } });
   };
 
   return (
