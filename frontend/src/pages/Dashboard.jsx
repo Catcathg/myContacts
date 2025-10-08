@@ -9,6 +9,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log(token)
     if (!token) {
       navigate("/connexion");
     }
@@ -20,7 +21,7 @@ const Dashboard = () => {
   };
 
   const handleAddContact = () => {
-    navigate("/ajouter-contact", { state: { refreshDashboard: () => setRefreshKey(prev => prev + 1) } });
+    navigate("/ajouter-contact");
   };
 
   return (
