@@ -1,16 +1,16 @@
 "use client";
-
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ContactList from '../components/ContactList';
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [refreshKey, setRefreshKey] = useState(0); // clé pour forcer le refresh
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      navigate("/connexion"); // si pas de token
+      navigate("/connexion");
     }
   }, [navigate]);
 
@@ -20,12 +20,13 @@ const Dashboard = () => {
   };
 
   const handleAddContact = () => {
-    navigate("/ajouter-contact"); 
+    navigate("/ajouter-contact", { state: { onAdd: () => setRefreshKey(prev => prev + 1) } });
+    // onAdd sera déclenché après l'ajout pour rafraîchir la liste
   };
 
   return (
     <div className="p-4">
-      <ContactList />
+      <ContactList refreshKey={refreshKey} />
 
       <button
         onClick={handleAddContact}
