@@ -16,8 +16,8 @@ const ContactList = () => {
             const response = await axios.get(`https://mycontacts-a3hi.onrender.com/api/contacts`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-
-            setContacts(response.data);
+            console.log("Contacts reçus :", response.data); 
+            setContacts(response.data.contacts);
             setError(null);
         } catch (err) {
             setError(
@@ -73,7 +73,7 @@ const ContactList = () => {
                 <p>Aucun contact trouvé.</p>
             ) : (
                 <ul className="space-y-2">
-                    {contacts.map((contact) => (
+                   {Array.isArray(contacts) && contacts.map((contact) => (
                         <li key={contact._id} className="flex items-center gap-2">
                             {editingId === contact._id ? (
                                 <>
