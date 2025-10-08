@@ -10,22 +10,27 @@ const userRoutes = require('./routes/userRoute');
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+    "https://mycontacts-a3hi.onrender.com",
+    "http://localhost:5173"
+];
+app.use(cors({ origin: allowedOrigins }));
+
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 if (process.env.NODE_ENV !== 'test') {
-  connectDB();
+    connectDB();
 }
 
 app.use('/api/contacts', contactRoutes);
 app.use('/auth', userRoutes);
 
 if (process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log('Server Start');
-  });
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log('Server Start');
+    });
 }
 
 module.exports = app;
