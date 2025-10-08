@@ -35,8 +35,8 @@ const auth = require("../middleware/auth");
  *           example:
  *             firstName: "Jean"
  *             lastName: "Dujardin"
- *             email: "jean.dujardin@example.com"
  *             phone: "0123456789"
+ *             image: ""
  *     responses:
  *       201:
  *         description: Contact créé avec succès

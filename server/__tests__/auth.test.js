@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../server"); 
 const User = require("../models/User");
 
-describe("🔑 Tests /auth", () => {
+describe("Tests /auth", () => {
   beforeEach(async () => {
     // On nettoie les users avant chaque test (setup.js nettoie déjà, mais double sécurité ici si besoin)
     await User.deleteMany();

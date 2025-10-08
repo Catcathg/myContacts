@@ -2,7 +2,8 @@ import './App.css'
 import Home from '../src/pages/Home'
 import Connexion from '../src/pages/Connexion'
 import Inscription from '../src/pages/Inscription'
-import Contacts from '../src/pages/Contacts'
+import Dashboard from '../src/pages/Dashboard'
+import Form from '../src/pages/Form'
 import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom';
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path='/connexion' element={<Connexion/>} />
         <Route path="/inscription" element={<Inscription/>} />
-        <Route path="/contacts" element={<Contacts/>} />
+        <Route path="/dashboard" element={<Dashboard/>} />
+        <Route path="/ajouter-contact" element={<Form/>} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,4 +1,5 @@
 const request = require("supertest");
+const mongoose = require("mongoose");
 const app = require("../server"); 
 const User = require("../models/User");
 const Contact = require("../models/Contact");
@@ -7,82 +8,111 @@ const jwt = require("jsonwebtoken");
 let token;
 let userId;
 
+beforeAll(async () => {
+  // Connexion à la DB de test uniquement si pas déjà connecté
+  const mongoUri = process.env.MONGO_URI_TEST;
+  if (mongoose.connection.readyState === 0) {
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+  }
+});
+
+afterAll(async () => {
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.connection.close();
+  }
+}, 10000);
+
 beforeEach(async () => {
-  // Nettoyage des collections
   await User.deleteMany();
   await Contact.deleteMany();
 
-  // Créer un utilisateur de test
   const user = await new User({ email: "user@test.com", password: "hashed" }).save();
   userId = user._id;
 
-  // Générer un token JWT
   token = jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
 });
 
-describe("Tests /contacts", () => {
+describe("Tests /api/contacts", () => {
   it("Création d’un contact", async () => {
     const res = await request(app)
-      .post("/contacts")
+      .post("/api/contacts")
       .set("Authorization", `Bearer ${token}`)
-      .send({ name: "Alice", email: "alice@mail.com" });
+      .send({
+        firstName: "Alice",
+        lastName: "Smith",
+        phone: "0612345678",
+      });
 
     expect(res.statusCode).toBe(201);
-    expect(res.body.name).toBe("Alice");
+    expect(res.body.firstName).toBe("Alice");
 
-    const contactInDb = await Contact.findOne({ name: "Alice", user: userId });
+    const contactInDb = await Contact.findOne({ firstName: "Alice", user: userId });
     expect(contactInDb).not.toBeNull();
   });
 
   it("Récupération des contacts liés au user connecté", async () => {
-    await new Contact({ name: "Bob", email: "bob@mail.com", user: userId }).save();
+    await new Contact({ firstName: "Bob", lastName: "Johnson", phone: "0623456789", user: userId }).save();
 
     const res = await request(app)
-      .get("/contacts")
+      .get("/api/contacts")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBe(1);
-    expect(res.body[0].name).toBe("Bob");
+    expect(res.body[0].firstName).toBe("Bob");
   });
 
   it("Mise à jour d’un contact existant", async () => {
-    const contact = await new Contact({ name: "Charlie", email: "charlie@mail.com", user: userId }).save();
+    const contact = await new Contact({
+      firstName: "Charlie",
+      lastName: "Brown",
+      phone: "0634567890",
+      user: userId,
+    }).save();
 
     const res = await request(app)
-      .put(`/contacts/${contact._id}`)
+      .patch(`/api/contacts/${contact._id}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ name: "Charlie Updated" });
+      .send({ firstName: "Charlie Updated" });
 
     expect(res.statusCode).toBe(200);
-    expect(res.body.name).toBe("Charlie Updated");
+    expect(res.body.firstName).toBe("Charlie Updated");
 
     const contactUpdated = await Contact.findById(contact._id);
-    expect(contactUpdated.name).toBe("Charlie Updated");
+    expect(contactUpdated.firstName).toBe("Charlie Updated");
   });
 
   it("Impossible de mettre à jour un contact d’un autre user", async () => {
     const otherUserContact = await new Contact({
-      name: "Eve",
-      email: "eve@mail.com",
-      user: "507f1f77bcf86cd799439011" 
+      firstName: "Eve",
+      lastName: "Adams",
+      phone: "0645678901",
+      user: new mongoose.Types.ObjectId(),
     }).save();
 
     const res = await request(app)
-      .put(`/contacts/${otherUserContact._id}`)
+      .patch(`/api/contacts/${otherUserContact._id}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ name: "Hacker" });
+      .send({ firstName: "Hacker" });
 
     expect(res.statusCode).toBe(404);
     expect(res.body.message).toBe("Contact introuvable");
   });
 
   it("Suppression d’un contact", async () => {
-    const myContact = await new Contact({ name: "David", email: "david@mail.com", user: userId }).save();
+    const myContact = await new Contact({
+      firstName: "David",
+      lastName: "Lee",
+      phone: "0656789012",
+      user: userId,
+    }).save();
 
     const res = await request(app)
-      .delete(`/contacts/${myContact._id}`)
+      .delete(`/api/contacts/${myContact._id}`)
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.statusCode).toBe(200);

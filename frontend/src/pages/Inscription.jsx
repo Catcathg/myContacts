@@ -1,7 +1,8 @@
 'use client';
 import "../index.css";
+import axios from "axios";
 import React, { useState } from 'react';
-
+import { useNavigate } from "react-router-dom";
 
 const MailIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -29,19 +30,38 @@ const DiscordIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" hei
 
 
 const Inscription = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+    const navigate = useNavigate(); 
+    const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // empêche le rechargement de la page
+  
+    try {
+      const response = await axios.post("http://localhost:3000/auth/register", {
+        email: email,
+        password: password,
+      });
+  
+      console.log("Inscription réussie :", response.data);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Erreur lors de l'inscription :", error);
+      alert("Erreur : " + (error.response?.data?.message || "Une erreur est survenue"));
+    }
+  };
+
   return <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
 
 
         {}
         <div className="bg-white dark:bg-black rounded-b-2xl shadow-xl border-t-0 p-8">
-          <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
             {}
             <div className="space-y-2">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
