@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const ContactList = () => {
+const ContactList = ({ refreshKey = 0 }) => {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,20 +14,22 @@ const ContactList = () => {
     image: "",
   });
 
+  // Fonction pour récupérer les contacts
   const fetchContacts = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
+      if (!token) throw new Error("Utilisateur non connecté");
 
       const response = await axios.get(
         `https://mycontacts-a3hi.onrender.com/api/contacts`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       // Vérifie si c'est un tableau ou un objet avec "contacts"
-      const data =
-        Array.isArray(response.data) ? response.data : response.data.contacts;
+      const data = Array.isArray(response.data)
+        ? response.data
+        : response.data.contacts;
 
       setContacts(Array.isArray(data) ? data : []);
       setError(null);
@@ -46,8 +48,9 @@ const ContactList = () => {
 
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [refreshKey]); // se recharge si refreshKey change
 
+  // Début édition d’un contact
   const startEditing = (contact) => {
     setEditingId(contact._id);
     setEditData({
@@ -64,6 +67,7 @@ const ContactList = () => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
 
+  // Sauvegarde modification
   const saveEdit = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -73,7 +77,7 @@ const ContactList = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setEditingId(null);
-      fetchContacts(); // Rafraîchir la liste
+      fetchContacts();
     } catch (err) {
       alert("Erreur lors de la modification du contact.");
       console.error(err);
