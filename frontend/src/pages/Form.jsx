@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../config";
 
 const Form = () => {
     const navigate = useNavigate();
@@ -18,7 +17,7 @@ const Form = () => {
             const token = localStorage.getItem("token");
 
             await axios.post(
-                `${API_URL}/api/contacts`,
+                `https://mycontacts-a3hi.onrender.com/api/contacts`,
                 { firstName, lastName, phone, image },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

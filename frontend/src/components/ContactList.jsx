@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { API_URL } from "../config";
 
 const ContactList = () => {
     const [contacts, setContacts] = useState([]);
@@ -14,7 +13,7 @@ const ContactList = () => {
         try {
             const token = localStorage.getItem("token");
 
-            const response = await axios.get(`${API_URL}/api/contacts`, {
+            const response = await axios.get(`https://mycontacts-a3hi.onrender.com/api/contacts`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -53,7 +52,7 @@ const ContactList = () => {
     const saveEdit = async (id) => {
         try {
             const token = localStorage.getItem("token");
-            await axios.patch(`${API_URL}/api/contacts/${id}`, editData, {
+            await axios.patch(`https://mycontacts-a3hi.onrender.com/api/contacts/${id}`, editData, {
                 headers: { Authorization: `Bearer ${token}` }
               });              
             setEditingId(null);

@@ -3,7 +3,6 @@ import "../index.css";
 import axios from "axios";
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../config";
 
 const MailIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -43,7 +42,7 @@ const Inscription = () => {
     e.preventDefault(); // empêche le rechargement de la page
   
     try {
-      const response = await axios.post(`${API_URL}/auth/register`, {
+      const response = await axios.post(`https://mycontacts-a3hi.onrender.com/auth/register`, {
         email: email,
         password: password,
       });
