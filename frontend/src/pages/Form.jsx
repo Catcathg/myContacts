@@ -1,104 +1,61 @@
 "use client";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
 const Form = () => {
-    const navigate = useNavigate();
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [phone, setPhone] = useState("");
-    const [image, setImage] = useState("https://vectorified.com/images/anonymous-person-icon-13.jpg");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const onAdd = location.state?.onAdd;
+  
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    image: "",
+  });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-        try {
-            const token = localStorage.getItem("token");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) return alert("Utilisateur non authentifié");
 
-            await axios.post(
-                `https://mycontacts-a3hi.onrender.com/api/contacts`,
-                { firstName, lastName, phone, image },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+    try {
+      const response = await axios.post(
+        "https://mycontacts-a3hi.onrender.com/api/contacts",
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-            alert("Contact ajouté !");
-            navigate("/dashboard");
-        } catch (error) {
-            console.error(error);
-            alert("Erreur lors de l'ajout du contact.");
-        }
-    };
-
-    const handleBack = () => {
+      if (response.status === 201) {
+        alert("Contact créé avec succès !");
+        if (onAdd) onAdd(); // rafraîchir la liste dans Dashboard
         navigate("/dashboard");
-    };
+      } else {
+        alert("Erreur : le contact n'a pas été créé !");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Erreur serveur lors de la création du contact !");
+    }
+  };
 
-    return (
-        <div className="p-4 max-w-md mx-auto">
-            <form onSubmit={handleSubmit} className="space-y-4">
-
-                <div>
-                    <label htmlFor="fname">First name:</label><br />
-                    <input
-                        type="text"
-                        id="fname"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="border p-2 rounded w-full"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="lname">Last name:</label><br />
-                    <input
-                        type="text"
-                        id="lname"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        className="border p-2 rounded w-full"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="phone">Phone:</label><br />
-                    <input
-                        type="text"
-                        id="phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="border p-2 rounded w-full"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="image">Image:</label><br />
-                    <input
-                        type="text"
-                        id="image"
-                        value={image}
-                        onChange={(e) => setImage(e.target.value)}
-                        className="border p-2 rounded w-full"
-                    />
-                </div>
-                <button onClick={handleBack}
-                    className="mt-2 px-4 py-2 bg-blue-500 text-black rounded hover:bg-blue-600 transition-colors"
-                >
-                    Retour
-                </button>
-
-                <button
-                    type="submit"
-                    className="mt-2 px-4 py-2 bg-blue-500 text-black rounded hover:bg-blue-600 transition-colors"
-                >
-                    Ajouter
-                </button>
-            </form>
-        </div>
-    );
+  return (
+    <div className="p-4">
+      <h2>Ajouter un contact</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-64">
+        <input type="text" name="firstName" placeholder="Prénom" value={formData.firstName} onChange={handleChange} required className="border p-1 rounded"/>
+        <input type="text" name="lastName" placeholder="Nom" value={formData.lastName} onChange={handleChange} required className="border p-1 rounded"/>
+        <input type="text" name="phone" placeholder="Téléphone" value={formData.phone} onChange={handleChange} required className="border p-1 rounded"/>
+        <input type="text" name="image" placeholder="Image URL" value={formData.image} onChange={handleChange} className="border p-1 rounded"/>
+        <button type="submit" className="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600">Créer</button>
+      </form>
+    </div>
+  );
 };
 
 export default Form;

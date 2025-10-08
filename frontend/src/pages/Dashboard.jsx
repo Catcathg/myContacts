@@ -1,27 +1,24 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ContactList from '../components/ContactList';
+import ContactList from "../components/ContactList";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [refreshKey, setRefreshKey] = useState(0); 
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log(token)
-    if (!token) {
-      navigate("/connexion");
-    }
+    if (!token) navigate("/connexion");
   }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/"); 
+    navigate("/");
   };
 
   const handleAddContact = () => {
-    navigate("/ajouter-contact");
+    navigate("/ajouter-contact", { state: { onAdd: () => setRefreshKey(prev => prev + 1) } });
   };
 
   return (

@@ -16,9 +16,7 @@ const ContactList = ({ refreshKey }) => {
 
   const getToken = () => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Token manquant ! L'utilisateur n'est pas logué.");
-    }
+    if (!token) console.error("Token manquant !");
     return token;
   };
 
@@ -26,21 +24,19 @@ const ContactList = ({ refreshKey }) => {
     setLoading(true);
     try {
       const token = getToken();
-      if (!token) return setError("Utilisateur non authentifié.");
+      if (!token) return setError("Utilisateur non authentifié");
 
       const response = await axios.get(
-        `https://mycontacts-a3hi.onrender.com/api/contacts`,
+        "https://mycontacts-a3hi.onrender.com/api/contacts",
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // Vérifie si les contacts sont dans response.data ou response.data.contacts
       const data = Array.isArray(response.data)
         ? response.data
         : response.data.contacts;
 
       setContacts(Array.isArray(data) ? data : []);
       setError(null);
-      console.log("Contacts reçus :", data);
     } catch (err) {
       setError(
         err.response
@@ -85,7 +81,7 @@ const ContactList = ({ refreshKey }) => {
       );
 
       setEditingId(null);
-      fetchContacts(); // rafraîchir la liste
+      fetchContacts();
     } catch (err) {
       alert("Erreur lors de la modification du contact.");
       console.error(err);
