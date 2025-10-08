@@ -42,7 +42,7 @@ const Inscription = () => {
     e.preventDefault(); // empêche le rechargement de la page
   
     try {
-      const response = await axios.post("http://localhost:3000/auth/register", {
+      const response = await axios.post(`${API_URL}/auth/register`, {
         email: email,
         password: password,
       });

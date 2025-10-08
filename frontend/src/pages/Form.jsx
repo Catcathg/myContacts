@@ -17,7 +17,7 @@ const Form = () => {
             const token = localStorage.getItem("token");
 
             await axios.post(
-                "http://localhost:3000/api/contacts",
+                `${API_URL}/api/contacts`,
                 { firstName, lastName, phone, image },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
