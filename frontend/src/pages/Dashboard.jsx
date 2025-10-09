@@ -17,7 +17,6 @@ const Dashboard = () => {
   };
 
   const handleAddContact = () => {
-    // Passe juste un paramètre simple pour indiquer que l'on vient d'ajouter un contact
     navigate("/ajouter-contact");
   };
 

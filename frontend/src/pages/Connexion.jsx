@@ -56,7 +56,6 @@ const Connexion = () => {
 
             console.log("Réponse API login :", response.data);
 
-            // Vérifie si ton API renvoie token ou accessToken
             const token = response.data.token || response.data.accessToken;
             if (!token) {
                 alert("Erreur : token non reçu !");
