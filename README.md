@@ -44,7 +44,15 @@ Tu auras une UI Swagger où tu pourras tester tous tes endpoints (avec le token 
 - L’API utilise JWT pour sécuriser l’accès aux routes.
 - Le token est stocké dans le localStorage côté frontend.
 
-# Tests
+# Déploiement
+Lien : https://mycontacts-a3hi.onrender.com
+Swagger : https://mycontacts-1-7wx3.onrender.com/api-docs
+
+# Identifiants Tests 
+{
+  "email": "test@example.com",
+  "password": "motdepasse123"
+}
 
 # Notes 
 Par défaut, les contacts créés ont une image :
