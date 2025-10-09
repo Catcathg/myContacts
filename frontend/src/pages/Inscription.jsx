@@ -42,7 +42,7 @@ const Inscription = () => {
     e.preventDefault(); // empêche le rechargement de la page
   
     try {
-      const response = await axios.post(`https://mycontacts-a3hi.onrender.com/auth/register`, {
+      const response = await axios.post(`https://mycontacts-1-7wx3.onrender.com/auth/register`, {
         email: email,
         password: password,
       });

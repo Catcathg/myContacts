@@ -26,7 +26,7 @@ const Form = () => {
 
     try {
       const response = await axios.post(
-        "https://mycontacts-a3hi.onrender.com/api/contacts",
+        "https://mycontacts-1-7wx3.onrender.com/api/contacts",
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

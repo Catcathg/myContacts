@@ -27,7 +27,7 @@ const ContactList = ({ refreshKey }) => {
       if (!token) return setError("Utilisateur non authentifié");
 
       const response = await axios.get(
-        "https://mycontacts-a3hi.onrender.com/api/contacts",
+        "https://mycontacts-1-7wx3.onrender.com/api/contacts",
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -75,7 +75,7 @@ const ContactList = ({ refreshKey }) => {
       if (!token) return alert("Utilisateur non authentifié.");
 
       await axios.patch(
-        `https://mycontacts-a3hi.onrender.com/api/contacts/${id}`,
+        `https://mycontacts-1-7wx3.onrender.com/api/contacts/${id}`,
         editData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
