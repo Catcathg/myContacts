@@ -6,8 +6,8 @@ Une application Full-Stack MERN (MongoDB, Express, React, Node.js) permettant au
 - Voir tous leurs contacts appartenant à l'utilisateur connecté
 
 # Cloner le projet
-git clone https://github.com/<ton-user>/<ton-repo>.git
-cd <ton-repo>
+git clone https://github.com/ton-user/ton-repo.git
+cd ton-repo
 
 # Installation du Backend et Frontent
 cd server
