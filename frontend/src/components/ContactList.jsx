@@ -65,6 +65,24 @@ const ContactList = ({ refreshKey }) => {
     });
   };
 
+  const deleteContact = async (id) => {
+    if (!window.confirm("Es-tu sûr de vouloir supprimer ce contact ? :( ")) return;
+    try {
+      const token = getToken();
+      if (!token) return alert("Utilisateur non authentifié.");
+
+      await axios.delete(
+        `https://mycontacts-1-7wx3.onrender.com/api/contacts/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      fetchContacts(); // Rafraîchir la liste
+    } catch (err) {
+      alert("Erreur lors de la suppression du contact.");
+      console.error(err);
+    }
+  };
+
   const handleEditChange = (e) => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
@@ -159,6 +177,12 @@ const ContactList = ({ refreshKey }) => {
                     className="ml-2 px-2 py-1 bg-blue-500 text-black rounded"
                   >
                     Modifier
+                  </button>
+                  <button
+                    onClick={() => deleteContact(contact._id)}
+                    className="ml-2 px-2 py-1 bg-blue-500 text-black rounded"
+                  >
+                    Supprimer
                   </button>
                 </>
               )}
