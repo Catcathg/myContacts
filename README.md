@@ -18,11 +18,11 @@ npm install
 
 # Lancer le Backend et Frontend 
 cd server
-npm dev
+npm run dev
 => le backend démarre sur http://localhost:3000
 
 cd ../frontend
-npm dev
+npm run dev
 => le frontend démarre sur http://localhost:5173
 
 # API Endpoints
