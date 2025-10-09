@@ -17,7 +17,7 @@ const Form = () => {
             const token = localStorage.getItem("token");
 
             await axios.post(
-                "http://localhost:3000/api/contacts",
+                "https://mycontacts-1-7wx3.onrender.com/api/contacts",
                 { firstName, lastName, phone, image },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
